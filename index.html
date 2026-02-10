@@ -63,9 +63,9 @@
         <div class="login-box">
             <i class="fas fa-shield-halved" style="font-size: 40px; color: var(--primary); margin-bottom: 10px;"></i>
             <h3>KZT PLUS ADMIN</h3>
-            <input type="text" id="adminUser" class="u-input" placeholder="á€¡á€™á€Šá€º">
-            <input type="password" id="adminPass" class="u-input" placeholder="á€…á€€á€¬á€¸á€á€¾á€€á€º">
-            <button class="btn-main" onclick="checkLogin()">Login ðŸ”“</button>
+            <input type="text" id="adminUser" class="u-input" placeholder="အမည်">
+            <input type="password" id="adminPass" class="u-input" placeholder="စကားဝှက်">
+            <button class="btn-main" onclick="checkLogin()">Login 🔓</button>
             <p id="err" style="color:red; font-size:12px; margin-top:10px;"></p>
         </div>
     </div>
@@ -76,15 +76,15 @@
             <div class="slip-content">
                 <div class="slip-title"><i class="fas fa-bolt"></i> KZT Plus Vpn Vip</div>
                 <div class="slip-row"><span><i class="fas fa-id-badge"></i> TOKEN ID:</span> <span id="p-id" style="font-weight:bold;">...</span></div>
-                <div class="slip-row"><span><i class="fas fa-user"></i> á€”á€¬á€™á€Šá€º:</span> <span id="p-name" style="font-weight:bold;">...</span></div>
-                <div class="slip-row"><span><i class="fas fa-calendar-check"></i> á€€á€¯á€”á€ºá€†á€¯á€¶á€¸á€›á€€á€º:</span> <span id="p-exp" style="font-weight:bold;">...</span></div>
+                <div class="slip-row"><span><i class="fas fa-user"></i> နာမည်:</span> <span id="p-name" style="font-weight:bold;">...</span></div>
+                <div class="slip-row"><span><i class="fas fa-calendar-check"></i> ကုန်ဆုံးရက်:</span> <span id="p-exp" style="font-weight:bold;">...</span></div>
                 <div class="thanks-msg">Thank You for Using! <i class="fas fa-heart"></i></div>
             </div>
         </div>
 
         <div class="admin-panel">
-            <input type="text" id="docId" class="u-input" placeholder="ID (Token) á€›á€­á€¯á€€á€ºá€›á€”á€º">
-            <input type="text" id="username" class="u-input" placeholder="á€¡á€žá€¯á€¶á€¸á€•á€¼á€¯á€žá€°á€¡á€™á€Šá€º">
+            <input type="text" id="docId" class="u-input" placeholder="ID (Token) ရိုက်ရန်">
+            <input type="text" id="username" class="u-input" placeholder="အသုံးပြုသူအမည်">
             
             <div class="date-shortcuts">
                 <button class="btn-date" onclick="setAutoDate(7)">1 Week</button>
@@ -94,16 +94,16 @@
             </div>
             
             <input type="date" id="expiry" class="u-input">
-            <button class="btn-main" onclick="saveAndDownload()"><i class="fas fa-save"></i> Data á€žá€­á€™á€ºá€¸á€•á€¼á€®á€¸ Slip á€‘á€¯á€á€ºá€™á€Šá€º</button>
+            <button class="btn-main" onclick="saveAndDownload()"><i class="fas fa-save"></i> Data သိမ်းပြီး Slip ထုတ်မည်</button>
         </div>
 
         <div class="search-panel" style="justify-content: space-between;">
             <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
                 <i class="fas fa-search"></i>
-                <input type="text" id="searchInput" class="search-input" placeholder="á€¡á€™á€Šá€º á€žá€­á€¯á€·á€™á€Ÿá€¯á€á€º ID á€–á€¼á€„á€·á€ºá€›á€¾á€¬á€›á€”á€º..." oninput="searchUsers()">
+                <input type="text" id="searchInput" class="search-input" placeholder="အမည် သို့မဟုတ် ID ဖြင့်ရှာရန်..." oninput="searchUsers()">
             </div>
             <div style="font-size: 12px; font-weight: bold; color: var(--primary); background: #ffebeb; padding: 2px 10px; border-radius: 50px;">
-                <span id="countNum">0</span> á€šá€±á€¬á€€á€º
+                <span id="countNum">0</span> ယောက်
             </div>
         </div>
 
@@ -114,7 +114,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getFirestore, collection, doc, setDoc, onSnapshot, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    // á€¡á€žá€…á€ºá€•á€±á€¸á€‘á€¬á€¸á€žá€±á€¬ Firebase Config
+    // အသစ်ပေးထားသော Firebase Config
     const firebaseConfig = {
         apiKey: "AIzaSyBksBsPHk8-CtcqbgTctrypSAV0fqYVh0g",
         authDomain: "ktzvpn-d0c09.firebaseapp.com",
@@ -130,12 +130,12 @@
     let masterData = [];
 
     window.checkLogin = () => {
-        // Admin Login (Username: admin / Pass: admin - á€œá€­á€¯á€¡á€•á€ºá€žá€œá€­á€¯ á€•á€¼á€±á€¬á€„á€ºá€¸á€”á€­á€¯á€„á€ºá€žá€Šá€º)
+        // Admin Login (Username: admin / Pass: kso12345 - လိုအပ်သလို ပြောင်းနိုင်သည်)
         if(document.getElementById('adminUser').value === "admin" && document.getElementById('adminPass').value === "kso12345") {
             document.getElementById('login-overlay').style.display = 'none';
             document.getElementById('main-admin').style.display = 'block';
             loadData();
-        } else { document.getElementById('err').innerText = "á€á€„á€ºá€›á€±á€¬á€€á€ºá€á€½á€„á€·á€º á€™á€›á€¾á€­á€•á€«á‹"; }
+        } else { document.getElementById('err').innerText = "ဝင်ရောက်ခွင့် မရှိပါ။"; }
     };
 
     function loadData() {
@@ -178,8 +178,8 @@
                 <div class="card-main-content">
                     <div class="c-info">
                         <span class="c-id">ID: ${u.id}</span>
-                        <span class="c-name"><i class="fas fa-user-circle"></i> ${u.username || 'á€¡á€™á€Šá€ºá€™á€›á€¾á€­'}</span>
-                        <span class="c-date"><i class="fas fa-clock"></i> ${u.expiryDate} (${days} á€›á€€á€ºá€€á€»á€”á€º)</span>
+                        <span class="c-name"><i class="fas fa-user-circle"></i> ${u.username || 'အမည်မရှိ'}</span>
+                        <span class="c-date"><i class="fas fa-clock"></i> ${u.expiryDate} (${days} ရက်ကျန်)</span>
                     </div>
                     <div class="c-actions">
                         <button class="btn-s" style="background:#3b82f6" onclick="editU('${u.id}','${u.username}','${u.expiryDate}')"><i class="fas fa-edit"></i></button>
@@ -213,7 +213,7 @@
                 link.href = canvas.toDataURL();
                 link.click();
             });
-        } else { alert("á€¡á€á€»á€€á€ºá€¡á€œá€€á€º á€¡á€€á€¯á€”á€ºá€–á€¼á€Šá€·á€ºá€•á€«á‹"); }
+        } else { alert("အချက်အလက် အကုန်ဖြည့်ပါ။"); }
     };
 
     window.editU = (id, name, exp) => {
@@ -234,7 +234,7 @@
         await updateDoc(doc(db, "users", id), { status: s, isActive: (s === 'active') }); 
     };
 
-    window.deleteU = async (id) => { if(confirm("á€¤á€¡á€žá€¯á€¶á€¸á€•á€¼á€¯á€žá€°á€€á€­á€¯ á€–á€»á€€á€ºá€›á€”á€º á€žá€±á€á€»á€¬á€•á€«á€žá€œá€¬á€¸?")) await deleteDoc(doc(db, "users", id)); };
+    window.deleteU = async (id) => { if(confirm("ဤအသုံးပြုသူကို ဖျက်ရန် သေချာပါသလား?")) await deleteDoc(doc(db, "users", id)); };
 
     document.getElementById('docId').oninput = updatePreview;
     document.getElementById('username').oninput = updatePreview;
@@ -242,3 +242,4 @@
 </script>
 </body>
 </html>
+
