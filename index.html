@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KZT Plus Vpn Vip - Admin</title>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pyidaungsu:wght@400;700&display=swap');
+        :root { --primary: #ff3131; --bg: #f4f7f9; }
+        body { font-family: 'Pyidaungsu', sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+
+        #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        .login-box { text-align: center; width: 280px; padding: 25px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        .u-input { width: 100%; padding: 10px; margin: 8px 0; border: 1.5px solid #eee; border-radius: 12px; outline: none; box-sizing: border-box; font-family: 'Pyidaungsu'; }
+
+        #main-admin { display: none; width: 100%; max-width: 400px; }
+
+        /* Slip Area */
+        #capture-area { width: 340px; height: 260px; position: relative; border-radius: 20px; overflow: hidden; border: 3px solid var(--primary); background: #fff; margin: 0 auto 15px; }
+        .slip-bg { position: absolute; width: 100%; height: 100%; background: url('https://raw.githubusercontent.com/yiyi225775-tech/Apk/main/cute-red-panda-tree-cartoon-vector-icon-illustration-animal-nature-icon-concept-isolated-premium_138676-5975.jpg') center/cover; opacity: 0.07; }
+        .slip-content { position: relative; z-index: 5; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        .slip-title { font-size: 20px; font-weight: bold; color: var(--primary); margin-bottom: 12px; }
+        .slip-row { width: 85%; display: flex; justify-content: space-between; border-bottom: 1px solid #f5f5f5; padding: 8px 0; font-size: 14px; align-items: center; }
+        .slip-row i { color: var(--primary); margin-right: 8px; font-size: 14px; }
+        .thanks-msg { margin-top: 15px; font-weight: bold; color: var(--primary); font-size: 16px; }
+
+        .admin-panel, .search-panel { background: #fff; padding: 15px; border-radius: 18px; margin-bottom: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); width: 100%; box-sizing: border-box; }
+        
+        .date-shortcuts { display: flex; gap: 5px; margin-bottom: 10px; }
+        .btn-date { flex: 1; padding: 8px; font-size: 11px; border: 1px solid #ddd; border-radius: 8px; background: #fff; cursor: pointer; transition: 0.3s; font-weight: bold; color: #333; }
+        .btn-date:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+        .search-panel { display: flex; align-items: center; gap: 10px; border: 1.5px solid #eee; }
+        .search-input { border: none; outline: none; width: 100%; font-family: 'Pyidaungsu'; font-size: 14px; }
+        .btn-main { width: 100%; padding: 12px; background: var(--primary); color: #fff; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; }
+
+        /* User Card */
+        .user-card { 
+            background: #fff; border-radius: 15px; padding: 12px; margin-bottom: 15px; 
+            display: flex; flex-direction: column; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            position: relative; border-left: 6px solid #ccc; cursor: pointer;
+        }
+        .user-card:active { transform: scale(0.98); }
+        .user-card.banned { opacity: 0.5; filter: grayscale(1); border-left-color: #555 !important; }
+        .card-label { font-size: 10px; font-weight: bold; color: #fff; background: #333; padding: 2px 8px; border-radius: 5px; margin-bottom: 8px; align-self: flex-start; }
+        .card-main-content { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 8px; }
+        .c-info { flex: 1; }
+        .c-id { font-size: 11px; color: var(--primary); font-weight: bold; display: block; margin-bottom: 4px; border-bottom: 1px dashed #f0f0f0; }
+        .c-name { font-size: 14px; font-weight: bold; color: #1a1a1a; display: block; }
+        .c-date { font-size: 11px; color: #666; margin-top: 2px; display: block; }
+        .c-actions { display: flex; gap: 6px; }
+        .btn-s { width: 34px; height: 34px; border-radius: 9px; border: none; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; }
+
+        .expiry-bar-container { width: 100%; height: 6px; background: #f0f0f0; border-radius: 10px; overflow: hidden; margin-top: 8px; }
+        .expiry-bar-fill { height: 100%; border-radius: 10px; transition: width 0.5s ease; }
+    </style>
+</head>
+<body>
+
+    <div id="login-overlay">
+        <div class="login-box">
+            <i class="fas fa-shield-halved" style="font-size: 40px; color: var(--primary); margin-bottom: 10px;"></i>
+            <h3>KZT PLUS ADMIN</h3>
+            <input type="text" id="adminUser" class="u-input" placeholder="á€¡á€™á€Šá€º">
+            <input type="password" id="adminPass" class="u-input" placeholder="á€…á€€á€¬á€¸á€á€¾á€€á€º">
+            <button class="btn-main" onclick="checkLogin()">Login ðŸ”“</button>
+            <p id="err" style="color:red; font-size:12px; margin-top:10px;"></p>
+        </div>
+    </div>
+
+    <div id="main-admin">
+        <div id="capture-area">
+            <div class="slip-bg"></div>
+            <div class="slip-content">
+                <div class="slip-title"><i class="fas fa-bolt"></i> KZT Plus Vpn Vip</div>
+                <div class="slip-row"><span><i class="fas fa-id-badge"></i> TOKEN ID:</span> <span id="p-id" style="font-weight:bold;">...</span></div>
+                <div class="slip-row"><span><i class="fas fa-user"></i> á€”á€¬á€™á€Šá€º:</span> <span id="p-name" style="font-weight:bold;">...</span></div>
+                <div class="slip-row"><span><i class="fas fa-calendar-check"></i> á€€á€¯á€”á€ºá€†á€¯á€¶á€¸á€›á€€á€º:</span> <span id="p-exp" style="font-weight:bold;">...</span></div>
+                <div class="thanks-msg">Thank You for Using! <i class="fas fa-heart"></i></div>
+            </div>
+        </div>
+
+        <div class="admin-panel">
+            <input type="text" id="docId" class="u-input" placeholder="ID (Token) á€›á€­á€¯á€€á€ºá€›á€”á€º">
+            <input type="text" id="username" class="u-input" placeholder="á€¡á€žá€¯á€¶á€¸á€•á€¼á€¯á€žá€°á€¡á€™á€Šá€º">
+            
+            <div class="date-shortcuts">
+                <button class="btn-date" onclick="setAutoDate(7)">1 Week</button>
+                <button class="btn-date" onclick="setAutoDate(30)">1 Month</button>
+                <button class="btn-date" onclick="setAutoDate(60)">2 Months</button>
+                <button class="btn-date" onclick="setAutoDate(365)">1 Year</button>
+            </div>
+            
+            <input type="date" id="expiry" class="u-input">
+            <button class="btn-main" onclick="saveAndDownload()"><i class="fas fa-save"></i> Data á€žá€­á€™á€ºá€¸á€•á€¼á€®á€¸ Slip á€‘á€¯á€á€ºá€™á€Šá€º</button>
+        </div>
+
+        <div class="search-panel" style="justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="á€¡á€™á€Šá€º á€žá€­á€¯á€·á€™á€Ÿá€¯á€á€º ID á€–á€¼á€„á€·á€ºá€›á€¾á€¬á€›á€”á€º..." oninput="searchUsers()">
+            </div>
+            <div style="font-size: 12px; font-weight: bold; color: var(--primary); background: #ffebeb; padding: 2px 10px; border-radius: 50px;">
+                <span id="countNum">0</span> á€šá€±á€¬á€€á€º
+            </div>
+        </div>
+
+        <div id="user-list-container"></div>
+    </div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, doc, setDoc, onSnapshot, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // á€¡á€žá€…á€ºá€•á€±á€¸á€‘á€¬á€¸á€žá€±á€¬ Firebase Config
+    const firebaseConfig = {
+        apiKey: "AIzaSyBksBsPHk8-CtcqbgTctrypSAV0fqYVh0g",
+        authDomain: "ktzvpn-d0c09.firebaseapp.com",
+        projectId: "ktzvpn-d0c09",
+        storageBucket: "ktzvpn-d0c09.firebasestorage.app",
+        messagingSenderId: "865411280845",
+        appId: "1:865411280845:android:2c6472e823827af45b1e84"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const usersCol = collection(db, "users");
+    let masterData = [];
+
+    window.checkLogin = () => {
+        // Admin Login (Username: admin / Pass: admin - á€œá€­á€¯á€¡á€•á€ºá€žá€œá€­á€¯ á€•á€¼á€±á€¬á€„á€ºá€¸á€”á€­á€¯á€„á€ºá€žá€Šá€º)
+        if(document.getElementById('adminUser').value === "admin" && document.getElementById('adminPass').value === "kso12345") {
+            document.getElementById('login-overlay').style.display = 'none';
+            document.getElementById('main-admin').style.display = 'block';
+            loadData();
+        } else { document.getElementById('err').innerText = "á€á€„á€ºá€›á€±á€¬á€€á€ºá€á€½á€„á€·á€º á€™á€›á€¾á€­á€•á€«á‹"; }
+    };
+
+    function loadData() {
+        onSnapshot(usersCol, (snap) => {
+            masterData = [];
+            snap.forEach(d => masterData.push({ id: d.id, ...d.data() }));
+            render(masterData);
+        });
+    }
+
+    window.setAutoDate = (days) => {
+        const today = new Date();
+        today.setDate(today.getDate() + days);
+        document.getElementById('expiry').value = today.toISOString().split('T')[0];
+        updatePreview();
+    };
+
+    window.searchUsers = () => {
+        const val = document.getElementById('searchInput').value.toLowerCase();
+        const filtered = masterData.filter(u => u.id.toLowerCase().includes(val) || (u.username && u.username.toLowerCase().includes(val)));
+        render(filtered);
+    };
+
+    function render(list) {
+        const container = document.getElementById("user-list-container");
+        document.getElementById("countNum").innerText = list.length;
+        container.innerHTML = "";
+        list.forEach((u, index) => {
+            const days = calculateDays(u.expiryDate);
+            const isBanned = (u.status === "banned" || u.isActive === false);
+            const percent = Math.min(100, (days / 30) * 100);
+            let color = days >= 20 ? "#2ed573" : (days >= 5 ? "#ffa502" : "#ff4757");
+
+            const div = document.createElement('div');
+            div.className = `user-card ${isBanned ? 'banned' : ''}`;
+            div.style.borderLeftColor = isBanned ? '#555' : color;
+            
+            div.innerHTML = `
+                <div class="card-label">VIP USER ${index + 1}</div>
+                <div class="card-main-content">
+                    <div class="c-info">
+                        <span class="c-id">ID: ${u.id}</span>
+                        <span class="c-name"><i class="fas fa-user-circle"></i> ${u.username || 'á€¡á€™á€Šá€ºá€™á€›á€¾á€­'}</span>
+                        <span class="c-date"><i class="fas fa-clock"></i> ${u.expiryDate} (${days} á€›á€€á€ºá€€á€»á€”á€º)</span>
+                    </div>
+                    <div class="c-actions">
+                        <button class="btn-s" style="background:#3b82f6" onclick="editU('${u.id}','${u.username}','${u.expiryDate}')"><i class="fas fa-edit"></i></button>
+                        <button class="btn-s" style="background:${isBanned ? '#2ed573' : '#ffa502'}" onclick="statusU('${u.id}', '${isBanned ? 'active' : 'banned'}')">
+                            <i class="fas ${isBanned ? 'fa-play' : 'fa-pause'}"></i>
+                        </button>
+                        <button class="btn-s" style="background:#ff4757" onclick="deleteU('${u.id}')"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+                <div class="expiry-bar-container"><div class="expiry-bar-fill" style="width: ${percent}%; background: ${color};"></div></div>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    function calculateDays(exp) {
+        if(!exp) return 0;
+        const diff = new Date(exp) - new Date();
+        return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+    }
+
+    window.saveAndDownload = async () => {
+        const id = document.getElementById('docId').value;
+        const name = document.getElementById('username').value;
+        const exp = document.getElementById('expiry').value;
+        if(id && name && exp) {
+            await setDoc(doc(db, "users", id), { username: name, expiryDate: exp, status: 'active', isActive: true }, { merge: true });
+            html2canvas(document.getElementById('capture-area'), { scale: 2 }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `KZT_Slip_${id}.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        } else { alert("á€¡á€á€»á€€á€ºá€¡á€œá€€á€º á€¡á€€á€¯á€”á€ºá€–á€¼á€Šá€·á€ºá€•á€«á‹"); }
+    };
+
+    window.editU = (id, name, exp) => {
+        document.getElementById('docId').value = id;
+        document.getElementById('username').value = name;
+        document.getElementById('expiry').value = exp;
+        updatePreview();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    function updatePreview() {
+        document.getElementById('p-id').innerText = document.getElementById('docId').value || "...";
+        document.getElementById('p-name').innerText = document.getElementById('username').value || "...";
+        document.getElementById('p-exp').innerText = document.getElementById('expiry').value || "...";
+    }
+
+    window.statusU = async (id, s) => { 
+        await updateDoc(doc(db, "users", id), { status: s, isActive: (s === 'active') }); 
+    };
+
+    window.deleteU = async (id) => { if(confirm("á€¤á€¡á€žá€¯á€¶á€¸á€•á€¼á€¯á€žá€°á€€á€­á€¯ á€–á€»á€€á€ºá€›á€”á€º á€žá€±á€á€»á€¬á€•á€«á€žá€œá€¬á€¸?")) await deleteDoc(doc(db, "users", id)); };
+
+    document.getElementById('docId').oninput = updatePreview;
+    document.getElementById('username').oninput = updatePreview;
+    document.getElementById('expiry').oninput = updatePreview;
+</script>
+</body>
+</html>
