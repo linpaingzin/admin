@@ -13,11 +13,14 @@
 
         #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; display: flex; align-items: center; justify-content: center; z-index: 1000; }
         .login-box { text-align: center; width: 280px; padding: 25px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
-        .u-input { width: 100%; padding: 10px; margin: 8px 0; border: 1.5px solid #eee; border-radius: 12px; outline: none; box-sizing: border-box; font-family: 'Pyidaungsu'; }
+        
+        .input-group { position: relative; width: 100%; margin: 8px 0; }
+        .u-input { width: 100%; padding: 10px; padding-right: 45px; border: 1.5px solid #eee; border-radius: 12px; outline: none; box-sizing: border-box; font-family: 'Pyidaungsu'; }
+        .btn-paste { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: #f0f0f0; border: none; padding: 5px 8px; border-radius: 8px; cursor: pointer; color: #666; font-size: 12px; z-index: 10; }
+        .btn-paste:active { background: #ddd; }
 
         #main-admin { display: none; width: 100%; max-width: 400px; }
 
-        /* Slip Area */
         #capture-area { width: 340px; height: 260px; position: relative; border-radius: 20px; overflow: hidden; border: 3px solid var(--primary); background: #fff; margin: 0 auto 15px; }
         .slip-bg { position: absolute; width: 100%; height: 100%; background: url('https://raw.githubusercontent.com/yiyi225775-tech/Apk/main/cute-red-panda-tree-cartoon-vector-icon-illustration-animal-nature-icon-concept-isolated-premium_138676-5975.jpg') center/cover; opacity: 0.07; }
         .slip-content { position: relative; z-index: 5; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
@@ -28,21 +31,18 @@
 
         .admin-panel, .search-panel { background: #fff; padding: 15px; border-radius: 18px; margin-bottom: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); width: 100%; box-sizing: border-box; }
         
-        .date-shortcuts { display: flex; gap: 5px; margin-bottom: 10px; }
-        .btn-date { flex: 1; padding: 8px; font-size: 11px; border: 1px solid #ddd; border-radius: 8px; background: #fff; cursor: pointer; transition: 0.3s; font-weight: bold; color: #333; }
+        .date-shortcuts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
+        .btn-date { padding: 8px 4px; font-size: 11px; border: 1px solid #ddd; border-radius: 8px; background: #fff; cursor: pointer; transition: 0.3s; font-weight: bold; color: #333; }
         .btn-date:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-        .search-panel { display: flex; align-items: center; gap: 10px; border: 1.5px solid #eee; }
-        .search-input { border: none; outline: none; width: 100%; font-family: 'Pyidaungsu'; font-size: 14px; }
         .btn-main { width: 100%; padding: 12px; background: var(--primary); color: #fff; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; }
 
-        /* User Card */
-        .user-card { 
-            background: #fff; border-radius: 15px; padding: 12px; margin-bottom: 15px; 
-            display: flex; flex-direction: column; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            position: relative; border-left: 6px solid #ccc; cursor: pointer;
-        }
-        .user-card:active { transform: scale(0.98); }
+        /* Search Panel Styles */
+        .search-container { position: relative; flex: 1; display: flex; align-items: center; }
+        .search-input { border: none; outline: none; width: 100%; padding: 5px 45px 5px 25px; font-family: 'Pyidaungsu'; font-size: 14px; }
+        .search-icon { position: absolute; left: 0; color: #999; }
+
+        .user-card { background: #fff; border-radius: 15px; padding: 12px; margin-bottom: 15px; display: flex; flex-direction: column; box-shadow: 0 4px 10px rgba(0,0,0,0.05); position: relative; border-left: 6px solid #ccc; cursor: pointer; }
         .user-card.banned { opacity: 0.5; filter: grayscale(1); border-left-color: #555 !important; }
         .card-label { font-size: 10px; font-weight: bold; color: #fff; background: #333; padding: 2px 8px; border-radius: 5px; margin-bottom: 8px; align-self: flex-start; }
         .card-main-content { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 8px; }
@@ -63,9 +63,9 @@
         <div class="login-box">
             <i class="fas fa-shield-halved" style="font-size: 40px; color: var(--primary); margin-bottom: 10px;"></i>
             <h3>KZT PLUS ADMIN</h3>
-            <input type="text" id="adminUser" class="u-input" placeholder="အမည်">
-            <input type="password" id="adminPass" class="u-input" placeholder="စကားဝှက်">
-            <button class="btn-main" onclick="checkLogin()">Login 🔓</button>
+            <input type="text" id="adminUser" class="u-input" placeholder="အမည်" style="padding-right:10px;">
+            <input type="password" id="adminPass" class="u-input" placeholder="စကားဝှက်" style="padding-right:10px;">
+            <button class="btn-main" onclick="checkLogin()" style="margin-top:10px;">Login 🔓</button>
             <p id="err" style="color:red; font-size:12px; margin-top:10px;"></p>
         </div>
     </div>
@@ -83,26 +83,38 @@
         </div>
 
         <div class="admin-panel">
-            <input type="text" id="docId" class="u-input" placeholder="ID (Token) ရိုက်ရန်">
-            <input type="text" id="username" class="u-input" placeholder="အသုံးပြုသူအမည်">
+            <div class="input-group">
+                <input type="text" id="docId" class="u-input" placeholder="ID (Token) ရိုက်ရန်">
+                <button class="btn-paste" onclick="pasteTo('docId')"><i class="fas fa-paste"></i></button>
+            </div>
+            
+            <div class="input-group">
+                <input type="text" id="username" class="u-input" placeholder="အသုံးပြုသူအမည်">
+                <button class="btn-paste" onclick="pasteTo('username')"><i class="fas fa-paste"></i></button>
+            </div>
             
             <div class="date-shortcuts">
+                <button class="btn-date" onclick="setAutoDate(2)">2 Days</button>
                 <button class="btn-date" onclick="setAutoDate(7)">1 Week</button>
                 <button class="btn-date" onclick="setAutoDate(30)">1 Month</button>
                 <button class="btn-date" onclick="setAutoDate(60)">2 Months</button>
+                <button class="btn-date" onclick="setAutoDate(90)">3 Months</button>
+                <button class="btn-date" onclick="setAutoDate(120)">4 Months</button>
+                <button class="btn-date" onclick="setAutoDate(150)">5 Months</button>
                 <button class="btn-date" onclick="setAutoDate(365)">1 Year</button>
             </div>
             
-            <input type="date" id="expiry" class="u-input">
+            <input type="date" id="expiry" class="u-input" style="margin-bottom:10px; padding-right:10px;">
             <button class="btn-main" onclick="saveAndDownload()"><i class="fas fa-save"></i> Data သိမ်းပြီး Slip ထုတ်မည်</button>
         </div>
 
-        <div class="search-panel" style="justify-content: space-between;">
-            <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
-                <i class="fas fa-search"></i>
+        <div class="search-panel" style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
                 <input type="text" id="searchInput" class="search-input" placeholder="အမည် သို့မဟုတ် ID ဖြင့်ရှာရန်..." oninput="searchUsers()">
+                <button class="btn-paste" onclick="pasteToSearch()"><i class="fas fa-paste"></i></button>
             </div>
-            <div style="font-size: 12px; font-weight: bold; color: var(--primary); background: #ffebeb; padding: 2px 10px; border-radius: 50px;">
+            <div style="font-size: 12px; font-weight: bold; color: var(--primary); background: #ffebeb; padding: 2px 10px; border-radius: 50px; white-space: nowrap;">
                 <span id="countNum">0</span> ယောက်
             </div>
         </div>
@@ -114,7 +126,6 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getFirestore, collection, doc, setDoc, onSnapshot, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    // အသစ်ပေးထားသော Firebase Config
     const firebaseConfig = {
         apiKey: "AIzaSyBksBsPHk8-CtcqbgTctrypSAV0fqYVh0g",
         authDomain: "ktzvpn-d0c09.firebaseapp.com",
@@ -130,12 +141,34 @@
     let masterData = [];
 
     window.checkLogin = () => {
-        // Admin Login (Username: admin / Pass: kso12345 - လိုအပ်သလို ပြောင်းနိုင်သည်)
-        if(document.getElementById('adminUser').value === "admin" && document.getElementById('adminPass').value === "kso12345") {
+        if(document.getElementById('adminUser').value === "admin" && document.getElementById('adminPass').value === "admin") {
             document.getElementById('login-overlay').style.display = 'none';
             document.getElementById('main-admin').style.display = 'block';
             loadData();
         } else { document.getElementById('err').innerText = "ဝင်ရောက်ခွင့် မရှိပါ။"; }
+    };
+
+    // Generic Paste function for ID and Name
+    window.pasteTo = async (id) => {
+        try {
+            const text = await navigator.clipboard.readText();
+            document.getElementById(id).value = text;
+            updatePreview();
+        } catch (err) {
+            alert("Paste လုပ်ရန် ခွင့်ပြုချက်မရပါ။");
+        }
+    };
+
+    // Special Paste function for Search (triggers search automatically)
+    window.pasteToSearch = async () => {
+        try {
+            const text = await navigator.clipboard.readText();
+            const searchInput = document.getElementById('searchInput');
+            searchInput.value = text;
+            searchUsers(); // ရှာဖွေမှု ချက်ချင်းလုပ်ဆောင်ရန်
+        } catch (err) {
+            alert("Paste လုပ်ရန် ခွင့်ပြုချက်မရပါ။");
+        }
     };
 
     function loadData() {
